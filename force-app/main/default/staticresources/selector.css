@@ -1,0 +1,58 @@
+div[data-id="file-div"] th, td{
+	min-width: 100px;
+    border: 1px solid #eeeeee;
+    padding: 5px;
+}
+div[data-id="file-div"] .section-clicked {
+	background-color: #fff707;
+	color: #ba0000;
+}
+div[data-id="file-div"] .clicked-question{
+	background-color: #ff7907;
+	color: #ffffff;
+}
+div[data-id="file-div"] .clicked-response {
+	background-color: #3d9602;
+	color: #ffffff;
+}
+div[data-id="file-div"] .clicked-id {
+	background-color: #0748ff;
+	color: #ffffff;
+}
+div[data-id="file-div"] .clicked-limit{
+	background-color: #ff0707;
+	color: #ffffff;
+}
+div[data-id="file-div"] .clicked-score{
+	background-color: #c207ff;
+	color: #ffffff;
+}
+div[data-id="file-div"] .clicked-status {
+	background-color: #07a3ff;
+	color: #ffffff;
+}
+div[data-id="file-div"] ul li{
+	font-size: 14px;
+    	margin-left: 10px;
+    	list-style-type: circle;
+}
+div[data-id="file-div"] p{
+	min-height: 20px;
+}
+
+div[data-id="file-div"]  td:hover::after { 
+    background-color: #ffa;
+    content: '';  
+    height: 10000px;    
+    left: 0;
+    position: absolute;  
+    top: -5000px;
+    width: 100%;
+    z-index: -1;        
+}
+table{
+ max-width: 100%;
+}
+.section-btn-group lightning-button-group lightning-button button{
+	width:39px;
+}

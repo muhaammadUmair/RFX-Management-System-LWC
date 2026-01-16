@@ -1,0 +1,34 @@
+<template>
+    <template if:true={matchingType.custom}>
+        <div class="slds-is-relative slds-p-around_medium avtemplate-item-picker__item-selected avtemplate-height_small">
+            <div class="avtemplate-item-picker__check">
+                <lightning-icon icon-name="utility:check" size="xx-small" variant="inverse"></lightning-icon>
+            </div>
+            <div class="slds-media slds-media_center slds-m-bottom_small">
+                <div class="div-4 slds-media__body">
+                    <lightning-icon icon-name="standard:user" size="large"></lightning-icon>
+                </div>
+            </div>
+            <p class="slds-text-heading_medium p-1" style="font-weight: bold">CUSTOM</p>
+            <div class="div-7 slds-text-body_regular slds-line-clamp_medium">Responses created by the custom organization users</div>
+        </div>
+    </template>
+    <template if:true={matchingType.astario}>
+        <div class="slds-box slds-is-relative slds-p-around_medium avtemplate-height_small">
+            <div class="div-4 slds-media__body">
+                <lightning-icon icon-name="standard:messaging_user" size="large"></lightning-icon>
+            </div>
+            <p class="slds-text-heading_medium p-1" style="font-weight: bold">ASTARIO</p>
+            <div class="div-3 slds-text-body_regular slds-line-clamp_medium">Responses provided by Astario users</div>
+        </div>
+    </template>
+    <template if:true={matchingType.both}>
+        <div class="slds-box slds-is-relative slds-p-around_medium avtemplate-height_small">
+            <div class="div-4 slds-media__body">
+                <lightning-icon icon-name="standard:groups" size="large"></lightning-icon>
+            </div>
+            <p class="slds-text-heading_medium p-1" style="font-weight: bold">BOTH</p>
+            <div class="div-3 slds-text-body_regular slds-line-clamp_medium">Responses provided by Astario and custom organization users</div>
+        </div>
+    </template>
+</template>

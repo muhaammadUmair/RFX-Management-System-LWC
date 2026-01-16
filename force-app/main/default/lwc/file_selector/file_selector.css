@@ -1,0 +1,42 @@
+.div-6 { 
+	padding-top: -11px;
+	padding-bottom: -6px;
+	height: 80px;
+	color: White;
+	font-weight: 500;
+	font-size: 24px;
+}
+.div-5 { 
+	background: #0A0140BA;
+}
+.progress-indicator-1 { 
+	height: 80px;
+	font-size: 42px;
+	font-weight: 500;
+	line-height: var(--lwc-lineHeightText);
+	background-color: transparent;
+}
+.file-upload-1 { 
+	margin-bottom: var(--lwc-spacingXxSmall);
+}
+.badge-1 { 
+	padding-top: auto;
+	margin-top: var(--lwc-spacingXxLarge);
+}
+.avtemplate-bottom_0 { 
+	margin-bottom: 0px;
+	bottom: 0;
+	font-size: 12px;
+}
+.avtemplate-height_small { 
+	height: var(--lwc-sizeSmall);
+}
+.file-upload-2 { 
+	margin-bottom: var(--lwc-spacingXxSmall);
+}
+.file-upload-3 { 
+	margin-bottom: var(--lwc-spacingXxSmall);
+}
+.input-1 { 
+	margin-left: var(--lwc-spacingMedium);
+}

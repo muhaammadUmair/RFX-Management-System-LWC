@@ -1,0 +1,27 @@
+.div-2 { 
+	color: var(--lwc-colorTextActionLabel);
+	font-weight: 500;
+}
+.formatted-date-time-4 { 
+	font-weight: 500;
+	color: var(--lwc-colorTextActionLabel);
+}
+.div-3 { 
+	font-weight: 500;
+	color: var(--lwc-colorTextActionLabel);
+}
+.formatted-date-time-5 { 
+	color: var(--lwc-colorTextActionLabel);
+	font-weight: 500;
+}
+.div-4 { 
+	font-weight: 500;
+	color: var(--lwc-colorTextActionLabel);
+}
+.formatted-date-time-6 { 
+	color: var(--lwc-colorTextActionLabel);
+	font-weight: 500;
+}
+.button-1 { 
+	margin-left: 400px;
+}

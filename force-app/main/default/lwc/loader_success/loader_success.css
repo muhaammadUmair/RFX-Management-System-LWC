@@ -1,0 +1,20 @@
+.div-2 { 
+	font-weight: 500;
+	font-size: 24px;
+	color: rgb(255, 255, 255);
+	background: #4c4674;
+}
+.progress-indicator-1 { 
+	font-weight: 800;
+	font-size: 42px;
+	line-height: var(--lwc-lineHeightText);
+}
+.icon-1 { 
+	--sds-c-icon-color-background: var(--lwc-colorTextDefault);
+	--sds-c-icon-color-foreground-default: var(--lwc-colorTextBrand);
+}
+.div-1 { 
+	font-size: 28px;
+	font-weight: 700;
+	line-height: var(--lwc-lineHeightHeading);
+}

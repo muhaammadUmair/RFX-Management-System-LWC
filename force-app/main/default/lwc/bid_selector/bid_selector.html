@@ -1,0 +1,57 @@
+<template>
+    <template if:false={isNewForm}>
+        <div style="text-align: center;margin: 10px;">
+            <lightning-button label="New" title="Non-primary action" onclick={handleClickNew}
+                class="slds-m-left_x-small"></lightning-button>
+        </div>
+        <div style="height: 300px;">
+            <lightning-datatable key-field="id" data={dataList} columns={columns} onrowselection={handleRowSelection}>
+            </lightning-datatable>
+        </div>
+    </template>
+    <template if:true={isNewForm}>
+        <lightning-record-edit-form record-id="" object-api-name="Bid__c" onsuccess={handleSuccess}>
+            <lightning-messages> </lightning-messages>
+            <div style="padding: 10px;" >
+                <div class="slds-grid slds-gutters">
+                    <div class="slds-col slds-size_6-of-12">
+                        <lightning-input-field required field-name="Name" value="Opportunity Name">
+                        </lightning-input-field>
+
+                    </div>
+                    <div class="slds- slds-size_6-of-12 ">
+                        <lightning-input-field required field-name="Status__c" style="width: 96.4%; margin-left: 12px" > </lightning-input-field>
+                    </div>
+
+                </div>
+                <div class="slds-grid slds-gutters">
+                    <div class="slds-col slds-size_6-of-12">
+                        <lightning-input-field required field-name="Opportunity__c" value={recordId}> </lightning-input-field>
+
+                    </div>
+                    <div class="slds-col slds-size_6-of-12">
+                        <lightning-input-field required field-name="Primary_Contact__c"> </lightning-input-field>
+
+                    </div>
+
+                </div>
+                <div class="slds-col">
+                    <lightning-input-field field-name="Clarification_Questions_Due__c"> </lightning-input-field>
+
+                </div>
+                <div class="slds-grid slds-wrap">
+                    <div class="slds-col">
+                        <lightning-input-field field-name="Description__c"> </lightning-input-field>
+                    </div>
+
+                </div>
+            </div>
+
+            <div style="text-align: left;margin: 20px;">
+                <lightning-button class="slds-m-top_small" variant="brand" type="submit" name="save" label="Save">
+                </lightning-button>
+            </div>
+
+        </lightning-record-edit-form>
+    </template>
+</template>

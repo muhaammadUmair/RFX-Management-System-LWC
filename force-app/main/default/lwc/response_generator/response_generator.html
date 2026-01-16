@@ -1,0 +1,139 @@
+<template>
+    <div class="div-header">
+        <div class="div-10 slds-text-heading_medium slds-p-around_large">Bid Details
+            <lightning-button label="Import" title="Neutral action" onclick={importResponses} class="button-5 slds-text-title_caps slds-float_right" variant="success" icon-position="left" type="button">
+            </lightning-button>
+            <lightning-button label="Cancel" title="Neutral action" class="slds-text-title_caps slds-float_right" icon-position="left" type="button"></lightning-button>
+        </div>
+    </div>
+    <div class="slds-card slds-card-boundary slds-box avtemplate-event-card__border-left slds-p-around_xxx-small">
+        <lightning-layout pull-to-boundary="medium" multiple-rows="true">
+            <lightning-layout-item padding="horizontal-medium" size="12" small-device-size="4" medium-device-size="2" large-device-size="2">
+                <div class="div-7 slds-p-around_xxx-small slds-m-around_none">
+                    <div class="" style="margin-left: 10px;margin-top: var(--lwc-spacingLarge);">
+                        <lightning-button-icon icon-name="utility:copy" type="button" onclick={applyAll} variant={getCopyBtnVariant} class="ata" alternative-text="Copy All" title="Apply to all"></lightning-button-icon>
+                    </div>
+                    <div class="slds-float_left div-15">
+                        <lightning-button-group>
+                            <ul class="ul-4 slds-button-group-row">
+                                <li class="slds-button-group-item"><button type="button" name="Submit" value="submit" title="Select Section" onclick={clickedSection} class="slds-button slds-button_neutral import-btn btn-min-width section-btn active">Section</button></li>
+                                <li class="slds-button-group-item">
+                                    
+                                    <lightning-button-icon icon-name="action:refresh" data-reset="clicked" onclick={resetAll} variant="border-filled" alternative-text="Reset" title="Reset Sections"></lightning-button-icon>
+                                </li>
+                            </ul>
+                        </lightning-button-group>
+                    </div>
+                    <div class="slds-float_left div-13">
+                        <lightning-button-group>
+                            <ul class="slds-button-group-row">
+                                <li class="slds-button-group-item"><button type="button" name="Submit" value="submit" onclick={clickedQuestion} title="Select Requirement" class="slds-button slds-button_neutral import-btn btn-min-width requirement-btn">Requirement</button></li>
+                                <li class="slds-button-group-item">
+                                    <lightning-button-icon icon-name="action:refresh" data-reset="clicked-question" onclick={resetAll} variant="border-filled" alternative-text="Reset" title="Reset Questions"></lightning-button-icon>
+                                </li>
+                            </ul>
+                        </lightning-button-group>
+                    </div>
+                    <div class="slds-float_left div-13">
+                        <lightning-button-group>
+                            <ul class="slds-button-group-row">
+                                <li class="slds-button-group-item"><button type="button" name="Submit" value="submit" onclick={clickedResponse} title="Select Response" class="slds-button slds-button_neutral import-btn btn-min-width response-btn">Response</button></li>
+                                <li class="slds-button-group-item">
+                                    <lightning-button-icon icon-name="action:refresh" data-reset="clicked-response" onclick={resetAll} variant="border-filled" alternative-text="Reset" title="Reset Questions"></lightning-button-icon>
+                                </li>
+                            </ul>
+                        </lightning-button-group>
+                    </div>
+                    <div class="slds-float_left div-13">
+                        <lightning-button-group>
+                            <ul class="slds-button-group-row">
+                                <li class="slds-button-group-item"><button type="button" name="Submit" value="submit" title="Select Requirement ID" onclick={clickedID} class="slds-button slds-button_neutral import-btn btn-min-width id-btn" >ID</button></li>
+                                <li class="slds-button-group-item">
+                                    <lightning-button-icon icon-name="action:refresh" data-reset="clicked-id" onclick={resetAll} variant="border-filled" alternative-text="Reset" title="Reset ID"></lightning-button-icon>
+                                </li>
+                            </ul>
+                        </lightning-button-group>
+                    </div>
+                    <div class="slds-float_left div-13">
+                        <lightning-button-group>
+                            <ul class="slds-button-group-row">
+                                <li class="slds-button-group-item"><button type="button" name="Submit" value="submit" title="Select Requirement Limit" onclick={clickedLimit} class="slds-button slds-button_neutral import-btn btn-min-width limit-btn">Limit</button></li>
+                                <li class="slds-button-group-item">
+                                    <lightning-button-icon icon-name="action:refresh" data-reset="clicked-limit" onclick={resetAll} variant="border-filled" alternative-text="Reset" title="Reset Limit"></lightning-button-icon>
+                                </li>
+                            </ul>
+                        </lightning-button-group>
+                    </div>
+                    <div class="slds-float_left div-13">
+                        <lightning-button-group>
+                            <ul class="slds-button-group-row">
+                                <li class="slds-button-group-item"><button type="button" name="Submit" value="submit" title="Select Requirement Score" onclick={clickedScore} class="slds-button slds-button_neutral import-btn btn-min-width score-btn">Score</button></li>
+                                <li class="slds-button-group-item">
+                                    <lightning-button-icon icon-name="action:refresh" data-reset="clicked-score" onclick={resetAll} variant="border-filled" alternative-text="Reset" title="Reset Score"></lightning-button-icon>
+                                </li>
+                            </ul>
+                        </lightning-button-group>
+                    </div>
+                    <div class="slds-float_left div-13">
+                        <lightning-button-group>
+                            <ul class="slds-button-group-row">
+                                <li class="slds-button-group-item"><button type="button" name="Submit" value="submit" title="Select Requirement Status" onclick={clickedStatus} class="slds-button slds-button_neutral import-btn btn-min-width status-btn">Status</button></li>
+                                <li class="slds-button-group-item">
+                                    <lightning-button-icon icon-name="action:refresh" data-reset="clicked-status" onclick={resetAll} variant="border-filled" alternative-text="Reset" title="Reset Status"></lightning-button-icon>
+                                </li>
+                            </ul>
+                        </lightning-button-group>
+                    </div>
+                </div>
+            </lightning-layout-item>
+            <lightning-layout-item padding="horizontal-small" size="12" small-device-size="12" medium-device-size="10" large-device-size="10">
+                <div class="div-19">
+                    <div class="div-17 slds-text-heading_small slds-p-around_xxx-small" style="font-weight: bold"><a class="a-4 slds-p-left_xx-small">Create Test with imported file.</a></div>
+                    <div class="slds-text-heading_small div-second slds-p-around_xxx-small" style="font-weight: bold"><a class="a-3 slds-p-left_xx-small slds-p-around_none">File Import</a></div>
+                    <div class="slds-text-body_regular slds-m-top_large avtemplate-event-card__light-text">
+                        <div class="slds-text-body_regular slds-scrollable_y div-8" style="overflow-x: scroll;max-height: 600px;">
+                            <div data-id="tabs-btns">
+                                
+                            </div>
+                            <div data-id="file-div">
+                                
+                            </div>
+                            <template if:true={isLoading}>
+                                <div class="exampleHolder">
+                                    <lightning-spinner alternative-text="Loading" size="medium" variant="brand"></lightning-spinner>
+                                </div>
+                            </template>
+                            
+                            <!--<ul class="ul-1">
+                                <li>
+                                    <h3 class="h3-1 slds-text-heading_small">One tool to rule all screens</h3>Customize layouts for both Salesforce desktop and mobile interface. Get a preview of your prototypes, test and validate everything.
+                                </li>
+                                <li class="li-1">Wouldn’t it be great if you could import existing objects, fields and layouts from your Salesforce into Avonni? That's easy with just a few clicks. No need to recreate everything from scratch. Avonni is made for thriving organizations that value collaboration and communication. Share your work to anyone with a public link. Invite users to collaborate, assign roles and collect feedback through comments.</li>
+                                <li class="li-2">Set the resizing rules to easily scale things up and down for different screen resolutions and adapt them for desktop and mobile. Layouts will resize with their text and elements inside to fit a wide array of modern devices. Easily modify a component's UI for different screen sizes by creating custom classes.</li>Wouldn’t it be great if you could import existing objects, fields and layouts from your Salesforce into Avonni? That's easy with just a few clicks. No need to recreate everything from scratch. Avonni is made for thriving organizations that value collaboration and communication. Share your work to anyone with a public link. Invite users to collaborate, assign roles and collect feedback through comments.
+
+                                <li>Set the resizing rules to easily scale things up and down for different screen resolutions and adapt them for desktop and mobile. Layouts will resize with their text and elements inside to fit a wide array of modern devices. Easily modify a component's UI for different screen sizes by creating custom classes.</li>Wouldn’t it be great if you could import existing objects, fields and layouts from your Salesforce into Avonni? That's easy with just a few clicks. No need to recreate everything from scratch. Avonni is made for thriving organizations that value collaboration and communication. Share your work to anyone with a public link. Invite users to collaborate, assign roles and collect feedback through comments.
+                                <li class="slds-text-longform">Wouldn’t it be great if you could import existing objects, fields and layouts from your Salesforce into Avonni? That's easy with just a few clicks. No need to recreate everything from scratch. Avonni is made for thriving organizations that value collaboration and communication. Share your work to anyone with a public link. Invite users to collaborate, assign roles and collect feedback through comments.</li>
+                                <li>Leave feedback through comments. @Mention others to notify. Mark as resolved to close the loop.<h3 class="slds-text-heading_small">Stretch to fill
+                                    </h3>
+                                </li>
+                            </ul>
+                            <ul class="ul-1">
+                                <li class="li-1">Wouldn’t it be great if you could import existing objects, fields and layouts from your Salesforce into Avonni? That's easy with just a few clicks. No need to recreate everything from scratch. Avonni is made for thriving organizations that value collaboration and communication. Share your work to anyone with a public link. Invite users to collaborate, assign roles and collect feedback through comments.</li>
+                                <li class="li-2">Set the resizing rules to easily scale things up and down for different screen resolutions and adapt them for desktop and mobile. Layouts will resize with their text and elements inside to fit a wide array of modern devices. Easily modify a component's UI for different screen sizes by creating custom classes.</li>Wouldn’t it be great if you could import existing objects, fields and layouts from your Salesforce into Avonni? That's easy with just a few clicks. No need to recreate everything from scratch. Avonni is made for thriving organizations that value collaboration and communication. Share your work to anyone with a public link. Invite users to collaborate, assign roles and collect feedback through comments.
+
+                                <li>Set the resizing rules to easily scale things up and down for different screen resolutions and adapt them for desktop and mobile. Layouts will resize with their text and elements inside to fit a wide array of modern devices. Easily modify a component's UI for different screen sizes by creating custom classes.</li>Wouldn’t it be great if you could import existing objects, fields and layouts from your Salesforce into Avonni? That's easy with just a few clicks. No need to recreate everything from scratch. Avonni is made for thriving organizations that value collaboration and communication. Share your work to anyone with a public link. Invite users to collaborate, assign roles and collect feedback through comments.
+                                <li class="slds-text-longform">Wouldn’t it be great if you could import existing objects, fields and layouts from your Salesforce into Avonni? That's easy with just a few clicks. No need to recreate everything from scratch. Avonni is made for thriving organizations that value collaboration and communication. Share your work to anyone with a public link. Invite users to collaborate, assign roles and collect feedback through comments.</li>
+                                <li>Leave feedback through comments. @Mention others to notify. Mark as resolved to close the loop.</li>
+                            </ul>-->
+                        </div>
+                    </div>
+                </div>
+            </lightning-layout-item>
+        </lightning-layout>
+    </div>
+    <div>
+        <lightning-input-rich-text placeholder="Type something interesting"></lightning-input-rich-text>
+    </div>
+    <lightning-input-rich-text placeholder="Type something interesting"></lightning-input-rich-text>
+    <c-confirmation-dialog visible={comfVisible} title={comfTitle} name={comfName} message={ComfMessage} confirm-label={confirmLabel} cancel-label={cancelLabel} original-message={originalMessage}></c-confirmation-dialog>
+</template>

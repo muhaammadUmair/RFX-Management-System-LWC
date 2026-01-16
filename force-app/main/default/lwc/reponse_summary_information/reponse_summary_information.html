@@ -1,0 +1,101 @@
+<template>
+    <div class="slds-text-heading_small">Summary</div>
+    <div class="slds-m-top_small">
+        <p class="p-1 slds-p-left_large">Number of requirements:
+            <lightning-helptext content="Number of requirements based on Response Status:"></lightning-helptext>
+            <lightning-avatar initials={lengthofCompleteRequirement} size="medium" variant="square" class="avatar-1 slds-icon-standard-account">
+            </lightning-avatar>
+            <lightning-avatar initials={lengthofInProgressRequirement} size="medium" variant="square" class="avatar-1-copy slds-icon-standard-account">
+            </lightning-avatar>
+            <lightning-avatar size="medium" variant="square" class="avatar-1-copy-copy slds-icon-standard-account"
+                initials={lengthofNotStartedRequirement}></lightning-avatar>
+        </p>
+    </div>
+    <!--<p class="slds-p-left_large slds-m-around_none p-2">Number of requirements based on Response Status:
+        <lightning-avatar initials="0" size="medium" variant="square" class="avatar-1 slds-icon-standard-account">
+        </lightning-avatar>
+        <lightning-avatar initials="0" size="medium" variant="square" class="avatar-1-copy slds-icon-standard-account">
+        </lightning-avatar>
+        <lightning-avatar size="medium" variant="square" class="avatar-1-copy-copy slds-icon-standard-account"
+            initials="0"></lightning-avatar>
+    </p>-->
+    <div class="slds-m-top_small">
+        <p class="p-1 slds-p-left_large">Delivery Effort:
+            <lightning-helptext content="The sum of number of days required for Delivery"></lightning-helptext>
+            <span class="tags">
+                <lightning-avatar initials={sumOfEffortLevel} size="medium" variant="square" class="avatar-1-copy-copy-copy slds-icon-standard-account auto-width slds-p-around_medium"></lightning-avatar>
+                <!--<lightning-badge label={sumOfEffortLevel}></lightning-badge>-->
+        </span>
+        </p>
+        <!--<p class="slds-p-left_large">The sum of number of days required for Delivery:<lightning-avatar initials="5"
+                size="medium" variant="square" class="avatar-1-copy-copy-copy slds-icon-standard-account">
+            </lightning-avatar>
+        </p>-->
+        <p class="slds-p-left_large"></p>
+        <p class="p-1 slds-p-left_large solutiondeck">Solution Deck:
+            <lightning-helptext content="List of requirement Tags from the Requirements"></lightning-helptext>
+            <template for:each={linkList} for:item="link">
+                
+                <span class="tags" key={file} >
+                    <template if:true={link.linkName} >
+                        <lightning-badge class="slds-badge" label={link.Linked_Tags__r.Name}></lightning-badge>
+                    </template>
+
+                </span>
+            </template>
+            <template if:true={remainingShow}>
+                <lightning-badge label={remainingCount} onclick={handleBadgeClick} style="margin-top: 10px;"></lightning-badge>
+                
+                <span></span>
+            </template>
+            <!--<lightning-badge label="DocuSign">
+            </lightning-badge>
+            <lightning-badge label="Sales Cloud"></lightning-badge>
+            <lightning-badge label="Chat"></lightning-badge>
+            <lightning-badge label="Social Cloud"></lightning-badge>-->
+        </p>
+        <!--<p class="slds-p-left_large">List of requirement Tags from the Requirements: <lightning-badge label="DocuSign">
+            </lightning-badge>
+            <lightning-badge label="Sales Cloud"></lightning-badge>
+            <lightning-badge label="Chat"></lightning-badge>
+            <lightning-badge label="Social Cloud"></lightning-badge>
+        </p>-->
+        <template if:true={remainingTagShow}>
+            <section role="dialog" tabindex="-1" aria-labelledby="modal-heading-01" aria-modal="true"
+                aria-describedby="modal-content-id-1" class="slds-modal slds-fade-in-open">
+                <div class="slds-modal__container" style="max-width: 80%; width: 60%;">
+                    <header class="slds-modal__header">
+                        <button
+                            class="slds-button slds-button_icon slds-modal__close slds-button_icon-inverse"
+                            title="Close" onclick={closeModal}>
+                            <lightning-icon icon-name="utility:close" size="medium">
+                            </lightning-icon>
+                            <span class="slds-assistive-text">Close</span>
+                        </button>
+                        <h2 id="modal-heading-01" class="slds-text-heading_medium slds-hyphenate">
+                            Solution Deck
+                        </h2>
+                    </header>
+                    <div class="slds-modal__content slds-p-around_medium" id="modal-content-id-1">
+                        <template for:each={tagList} for:item="tag">
+                            <span class="tags" key={file}>
+                                <template if:true={tag.linkName}>
+                                    <lightning-badge label={tag.Linked_Tags__r.Name} style="margin-top: 10px;"></lightning-badge>
+                                </template>
+            
+                            </span>
+                        </template>
+                    </div>
+                    <footer class="slds-modal__footer">
+                        <lightning-button label="Close" variant="neutral" onclick={closeModal}>
+                        </lightning-button>&nbsp;&nbsp;&nbsp;&nbsp;
+                        <!--<lightning-button label="Sav[pe" variant="brand" onclick={saveMethod}></lightning-button>-->
+                    </footer>
+                </div>
+            </section>
+            <div class="slds-backdrop slds-backdrop_open"></div>
+        </template>
+    </div>
+    
+    
+</template>

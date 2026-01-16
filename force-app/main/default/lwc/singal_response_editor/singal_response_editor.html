@@ -1,0 +1,1101 @@
+<template>
+    <div style="background-color: white;">
+        <template if:true={openModal}>
+            <div class="slds-modal slds-fade-in-open slds-backdrop">
+                <div class="slds-modal__container">
+                    <div class="slds-modal__header">
+                        <lightning-button-icon icon-name="utility:close" alternative-text="Close this window"
+                            size="large" variant="bare-inverse" onclick={closeModal} class="slds-modal__close">
+                        </lightning-button-icon>
+                        <h2>Assign User</h2>
+                    </div>
+                    <div class="slds-modal__content slds-p-around_medium">
+                        <lightning-record-edit-form onsuccess={closeModal} onsubmit={onSubmitPhoto}
+                            object-api-name="Requirement__c" record-id={RequirementId}>
+                            <lightning-messages> </lightning-messages>
+                            <lightning-input-field field-name="Assign_to__c" onchange={handleAvatarChange}
+                                variant="label-hidden">
+                            </lightning-input-field>
+                            <div class="slds-var-m-top_medium">
+                                <lightning-button variant="brand" type="submit" label="Save">
+                                </lightning-button>
+                            </div>
+                        </lightning-record-edit-form>
+                    </div>
+                    <div class="slds-modal__footer">
+                        <lightning-button label="close" variant="brand" onclick={closeModal}>
+                        </lightning-button>
+                    </div>
+                </div>
+            </div>
+        </template>
+        <template if:true={openBulkModal}>
+            <div class="slds-modal slds-fade-in-open slds-backdrop">
+                <div class="slds-modal__container">
+                    <div class="slds-modal__header">
+                        <lightning-button-icon icon-name="utility:close" alternative-text="Close this window"
+                            size="large" variant="bare-inverse" onclick={closeBulkModal} class="slds-modal__close">
+                        </lightning-button-icon>
+                        <h2>Assign User 1</h2>
+                    </div>
+                    <div class="slds-modal__content slds-p-around_medium">
+                        <lightning-record-edit-form onsuccess={closeBulkModal} object-api-name="Requirement__c">
+                            <lightning-messages> </lightning-messages>
+                            <lightning-input-field field-name="Assign_to__c" class="bulkUser" onchange={bulkUserChange}
+                                variant="label-hidden">
+                            </lightning-input-field>
+                            <div class="slds-var-m-top_medium">
+                                <lightning-button variant="brand" type="button" onclick={updateBulkAssignment}
+                                    label="Save">
+                                </lightning-button>
+                            </div>
+                        </lightning-record-edit-form>
+                    </div>
+                    <div class="slds-modal__footer">
+                        <lightning-button label="close" variant="brand" onclick={closeBulkModal}>
+                        </lightning-button>
+                    </div>
+                </div>
+            </div>
+        </template>
+        <lightning-layout pull-to-boundary="medium" multiple-rows="true">
+            <lightning-layout-item padding="horizontal-medium" size="12" small-device-size="12" medium-device-size="4"
+                large-device-size="4">
+                <lightning-tabset class="slds-card slds-card-boundary">
+                    <lightning-tab icon-name="utility:question">
+                        <div class="slds-p-around_small">
+                            <lightning-input data-searchword="true" onkeyup={filterList} type="text"
+                                label="Search From List">
+                            </lightning-input>
+
+                        </div>
+
+                        <lightning-accordion allow-multiple-sections-open active-section-name={activeIndex}
+                            onsectiontoggle={handleToggleSection} class="slds-scrollable slds-p-around_small"
+                            style="max-height:55rem; width:100%">
+
+                            <template for:each={sectionsList} for:item="section" for:index="sInd">
+                                <lightning-accordion-section key={section} name={sInd} label={section.Name}>
+                                    <div slot="actions" class="section-btn-group">
+                                        <lightning-button-group>
+                                            <lightning-button data-id={section.Id} data-name="Completed"
+                                                onclick={filterList} label={section.lengthofCompleteRequirement}
+                                                variant="success" class="button-6">
+                                            </lightning-button>
+                                            <lightning-button data-id={section.Id} data-name="In Progress"
+                                                onclick={filterList} label={section.lengthofInProgressRequirement}
+                                                variant="neutral" class="button-7">
+                                            </lightning-button>
+                                            <lightning-button data-id={section.Id} data-name="Not Started"
+                                                onclick={filterList} label={section.lengthofNotStartedRequirement}
+                                                variant="destructive"></lightning-button>
+                                        </lightning-button-group>
+                                    </div>
+                                    <template for:each={section.Requirements__r} for:item="req" for:index="reqInd">
+
+                                        <!-- <div class="slds-app-launcher__tile-body"> -->
+
+                                        <div key={req}>
+                                            <div key={req} class="slds-theme_shade slds-app-launcher__tile"
+                                                data-sectionid={section.Id} data-id={req.Id} data-ind={reqInd}
+                                                data-text={req.Requirement__c} style="cursor: pointer;"
+                                                onclick={handleSectionClick}>
+                                                <div data-sectionid={section.Id} data-id={req.Id} data-ind={reqInd}
+                                                    style="padding: 10px;cursor: pointer; width: 100%;"
+                                                    data-text={req.Requirement__c} onclick={handleSectionClick}
+                                                    class={req.selectedClass}>
+                                                    <!-- {req.Requirement__c} -->
+                                                    <lightning-formatted-rich-text data-sectionid={section.Id}
+                                                        data-id={req.Id} data-ind={reqInd}
+                                                        style="padding: 10px;cursor: pointer; width: 100%;"
+                                                        data-text={req.Requirement__c} onclick={handleSectionClick}
+                                                        value={req.Requirement__c}>
+                                                    </lightning-formatted-rich-text>
+
+                                                </div>
+                                                <!--<ol type="a" class="slds-border_top slds-border_right slds-border_bottom slds-border_left div46 slds-m-around_small">
+                                            <p>Describe how the solution can interface with the following software.</p>
+                                            <ol>
+                                                <li>ESR (Employee Service Record) version 50.1.1.0C. RDBMS: 12.1.0.2.0 Oracle applications 12.2.6</li>
+                                                <li class="li-14">Accounts Payable - Oracle version R12</li>
+                                                <li class="li-15">Trac system - Multi-tenancy.</li>
+                                                <li class="li-16">SSP - Matching Scheme (see deliverable no2)</li>
+                                                <li class="li-16">SSP - Matching Scheme (see deliverable no2)</li>
+                                                <li class="li-17">Selenity</li>
+                                            </ol>
+                                        </ol>
+                                        <div class="slds-text-align_right slds-m-around_small div-48">
+                                            <ul class="slds-button-group-row">
+                                                <li class="slds-button-group-item">
+                                                    <lightning-button-icon icon-name="utility:chart" variant="border-filled" alternative-text="Settings" size="medium" type="button"></lightning-button-icon>
+                                                </li>
+                                                <li class="slds-button-group-item">
+                                                    <lightning-button-icon icon-name="standard:filter" variant="border-filled" alternative-text="Settings" size="medium" type="button"></lightning-button-icon>
+                                                </li>
+                                                <li class="slds-button-group-item">
+                                                    <lightning-button-icon icon-name="utility:anywhere_chat" variant="border-filled" alternative-text="Settings" size="medium" type="button"></lightning-button-icon>
+                                                </li>
+                                                <li class="slds-button-group-item">
+                                                    <lightning-button-menu alternative-text="Show menu" icon-name="standard:settings" icon-size="medium">
+                                                        <lightning-menu-item value="MenuItemOne" label="Menu Item One"></lightning-menu-item>
+                                                        <lightning-menu-item value="MenuItemTwo" label="Menu Item Two"></lightning-menu-item>
+                                                    </lightning-button-menu>
+                                                </li>
+                                            </ul>
+                                        </div>-->
+                                            </div>
+                                        </div>
+                                    </template>
+                                </lightning-accordion-section>
+
+                            </template>
+                            <!--
+                            <lightning-accordion-section name="B" label="CONTRACTS AND COMMERCIAL">
+                                <div slot="actions">
+                                    <lightning-button label="20" variant="success" class="button-6"></lightning-button>
+                                    <lightning-button label="5" variant="neutral" class="button-7"></lightning-button>
+                                    <lightning-button label="35" variant="destructive"></lightning-button>
+                                </div>
+                                <div
+                                    class="div-47 slds-text-longform slds-border_top slds-border_right slds-border_bottom slds-border_left">
+                                    <div>
+                                        <div
+                                            class="slds-text-longform slds-border_top slds-border_right slds-border_bottom slds-border_left div-46 slds-m-around_small">
+                                            <p>University courses have application deadlines &amp; therefore bursary
+                                                applications need to accommodate this. Describe how the solution will
+                                                provide the following functionality:</p>
+                                            <ol type="a" class="ol-1">
+                                                <ol>
+                                                    <li class="li-18">Ability to contact Student groups via a
+                                                        &quot;countdown&quot; facility to ensure applications are placed
+                                                        in time.</li>
+                                                    <li class="li-19">Collaboration between Student groups and Student
+                                                        Awards Service throughout the academic year.</li>
+                                                    <li class="li-20">Interchangeable templates to accommodate specific
+                                                        courses </li>
+                                                    <li class="li-21">Amend term information / dates for students.</li>
+                                                    <li class="li-22">Ability to add new student courses annually for
+                                                        new cohorts.</li>
+                                                    <li class="li-23">Signpost students to the relevant guidance.</li>
+                                                </ol>
+                                            </ol>
+                                        </div>
+                                    </div>
+                                </div>
+                            </lightning-accordion-section>
+                            <lightning-accordion active-section-name="undefined" allow-multiple-sections-open="true"
+                                class="slds-scrollable_y">
+                                <lightning-accordion-section name="A" label="HOSTING">
+                                    <div slot="actions">
+                                        <lightning-button-group>
+                                            <lightning-button label="20" variant="success" class="button-6">
+                                            </lightning-button>
+                                            <lightning-button label="5" variant="neutral" class="button-7">
+                                            </lightning-button>
+                                        </lightning-button-group>
+                                        <lightning-button label="35" variant="destructive"></lightning-button>
+                                    </div>
+                                    <div
+                                        class="div-47 slds-text-longform slds-border_top slds-border_right slds-border_bottom slds-border_left">
+                                        <ol type="a"
+                                            class="slds-border_top slds-border_right slds-border_bottom slds-border_left div46 slds-m-around_small">
+                                            <p>Describe how the solution can interface with the following software.</p>
+                                            <ol>
+                                                <li>ESR (Employee Service Record) version 50.1.1.0C. RDBMS: 12.1.0.2.0
+                                                    Oracle applications 12.2.6</li>
+                                                <li class="li-14">Accounts Payable - Oracle version R12</li>
+                                                <li class="li-15">Trac system - Multi-tenancy.</li>
+                                                <li class="li-16">SSP - Matching Scheme (see deliverable no2)</li>
+                                                <li class="li-16">SSP - Matching Scheme (see deliverable no2)</li>
+                                                <li class="li-17">Selenity</li>
+                                            </ol>
+                                        </ol>
+                                        <div class="slds-text-align_right slds-m-around_small div-48">
+                                            <ul class="slds-button-group-row">
+                                                <li class="slds-button-group-item">
+                                                    <lightning-button-icon icon-name="utility:chart"
+                                                        variant="border-filled" alternative-text="Settings"
+                                                        size="medium" type="button"></lightning-button-icon>
+                                                </li>
+                                                <li class="slds-button-group-item">
+                                                    <lightning-button-icon icon-name="standard:filter"
+                                                        variant="border-filled" alternative-text="Settings"
+                                                        size="medium" type="button"></lightning-button-icon>
+                                                </li>
+                                                <li class="slds-button-group-item">
+                                                    <lightning-button-icon icon-name="utility:anywhere_chat"
+                                                        variant="border-filled" alternative-text="Settings"
+                                                        size="medium" type="button"></lightning-button-icon>
+                                                </li>
+                                                <li class="slds-button-group-item">
+                                                    <lightning-button-menu alternative-text="Show menu"
+                                                        icon-name="standard:settings" icon-size="medium">
+                                                        <lightning-menu-item value="MenuItemOne" label="Menu Item One">
+                                                        </lightning-menu-item>
+                                                        <lightning-menu-item value="MenuItemTwo" label="Menu Item Two">
+                                                        </lightning-menu-item>
+                                                    </lightning-button-menu>
+                                                </li>
+                                            </ul>
+                                        </div>
+                                        <div>
+                                            <div
+                                                class="slds-text-longform slds-border_top slds-border_right slds-border_bottom slds-border_left div-46 slds-m-around_small">
+                                                <p>University courses have application deadlines &amp; therefore bursary
+                                                    applications need to accommodate this. Describe how the solution
+                                                    will provide the following functionality:</p>
+                                                <ol type="a" class="ol-1">
+                                                    <ol>
+                                                        <li class="li-18">Ability to contact Student groups via a
+                                                            &quot;countdown&quot; facility to ensure applications are
+                                                            placed in time.</li>
+                                                        <li class="li-19">Collaboration between Student groups and
+                                                            Student Awards Service throughout the academic year.</li>
+                                                        <li class="li-20">Interchangeable templates to accommodate
+                                                            specific courses </li>
+                                                        <li class="li-21">Amend term information / dates for students.
+                                                        </li>
+                                                        <li class="li-22">Ability to add new student courses annually
+                                                            for new cohorts.</li>
+                                                        <li class="li-23">Signpost students to the relevant guidance.
+                                                        </li>
+                                                    </ol>
+                                                </ol>
+                                            </div>
+                                        </div>
+                                        <p
+                                            class="p-5 slds-text-longform slds-m-around_small slds-border_top slds-border_right slds-border_bottom slds-border_left">
+                                            To manage expectations for students applying for a bursary, a student
+                                            timeline should be provide for the individual student's journey. Describe
+                                            how the solution will manage the student journey inclusive of timescales'
+                                            for both students </p>
+                                        <p
+                                            class="p-4 slds-border_top slds-border_right slds-border_bottom slds-border_left slds-m-around_small">
+                                            Describe how the solution will manage bursary applications in Welsh and
+                                            facilitate engagement / communication with students (refer to guidance
+                                            policy no1 on page 43)</p>
+                                        <p
+                                            class="slds-text-longform slds-border_top slds-border_right slds-border_bottom slds-border_left p-6 slds-m-around_small">
+                                            Explain how the solution would verify UK bank details &amp; notify the
+                                            student or Student Awards Service of any changes. For example, advise if
+                                            incorrect bank number is submitted, confirm bank account can receive funds.
+                                        </p>
+                                        <div
+                                            class="slds-text-longform slds-border_top slds-border_right slds-border_bottom slds-border_left div-47 slds-m-around_small">
+                                            <p>An essential part of the bursary application process is verifying &amp;
+                                                certifying document evidence for identity checking. Describe and
+                                                demonstrate how the solution would undertake this functionality. (refer
+                                                to appendix A &amp; C, pages 38 &amp; 40).</p>
+                                            <p>You should explain in your answer:</p>
+                                            <ol type="a" class="ol-1">
+                                                <ol>
+                                                    <li>How the solution would identify documents eligible for e-verify
+                                                        / AI functionality.</li>
+                                                    <li class="li-14">How the solution can highlight documents not
+                                                        suitable for AI functionality.</li>
+                                                    <li class="li-15">How the solution would provide identity checking
+                                                        eg DBS checks.</li>
+                                                </ol>
+                                            </ol>
+                                        </div>
+                                    </div>
+                                </lightning-accordion-section>
+                                <lightning-accordion-section name="B" label="CONTRACTS AND COMMERCIAL">
+                                    <div slot="actions">
+                                        <lightning-button label="20" variant="success" class="button-6">
+                                        </lightning-button>
+                                        <lightning-button label="5" variant="neutral" class="button-7">
+                                        </lightning-button>
+                                        <lightning-button label="35" variant="destructive"></lightning-button>
+                                    </div>
+                                    <div
+                                        class="div-47 slds-text-longform slds-border_top slds-border_right slds-border_bottom slds-border_left">
+                                        <div>
+                                            <div
+                                                class="slds-text-longform slds-border_top slds-border_right slds-border_bottom slds-border_left div-46 slds-m-around_small">
+                                                <p>University courses have application deadlines &amp; therefore bursary
+                                                    applications need to accommodate this. Describe how the solution
+                                                    will provide the following functionality:</p>
+                                                <ol type="a" class="ol-1">
+                                                    <ol>
+                                                        <li class="li-18">Ability to contact Student groups via a
+                                                            &quot;countdown&quot; facility to ensure applications are
+                                                            placed in time.</li>
+                                                        <li class="li-19">Collaboration between Student groups and
+                                                            Student Awards Service throughout the academic year.</li>
+                                                        <li class="li-20">Interchangeable templates to accommodate
+                                                            specific courses </li>
+                                                        <li class="li-21">Amend term information / dates for students.
+                                                        </li>
+                                                        <li class="li-22">Ability to add new student courses annually
+                                                            for new cohorts.</li>
+                                                        <li class="li-23">Signpost students to the relevant guidance.
+                                                        </li>
+                                                    </ol>
+                                                </ol>
+                                            </div>
+                                        </div>
+                                        <p
+                                            class="p-5 slds-text-longform slds-m-around_small slds-border_top slds-border_right slds-border_bottom slds-border_left">
+                                            To manage expectations for students applying for a bursary, a student
+                                            timeline should be provide for the individual student's journey. Describe
+                                            how the solution will manage the student journey inclusive of timescales'
+                                            for both students </p>
+                                        <p
+                                            class="p-4 slds-border_top slds-border_right slds-border_bottom slds-border_left slds-m-around_small">
+                                            Describe how the solution will manage bursary applications in Welsh and
+                                            facilitate engagement / communication with students (refer to guidance
+                                            policy no1 on page 43)</p>
+                                        <p
+                                            class="slds-text-longform slds-border_top slds-border_right slds-border_bottom slds-border_left p-6 slds-m-around_small">
+                                            Explain how the solution would verify UK bank details &amp; notify the
+                                            student or Student Awards Service of any changes. For example, advise if
+                                            incorrect bank number is submitted, confirm bank account can receive funds.
+                                        </p>
+                                        <div
+                                            class="slds-text-longform slds-border_top slds-border_right slds-border_bottom slds-border_left div-47 slds-m-around_small">
+                                            <p>An essential part of the bursary application process is verifying &amp;
+                                                certifying document evidence for identity checking. Describe and
+                                                demonstrate how the solution would undertake this functionality. (refer
+                                                to appendix A &amp; C, pages 38 &amp; 40).</p>
+                                            <p>You should explain in your answer:</p>
+                                            <ol type="a" class="ol-1">
+                                                <ol>
+                                                    <li>How the solution would identify documents eligible for e-verify
+                                                        / AI functionality.</li>
+                                                    <li class="li-14">How the solution can highlight documents not
+                                                        suitable for AI functionality.</li>
+                                                    <li class="li-15">How the solution would provide identity checking
+                                                        eg DBS checks.</li>
+                                                </ol>
+                                            </ol>
+                                        </div>
+                                    </div>
+                                    <div
+                                        class="div-47 slds-text-longform slds-border_top slds-border_right slds-border_bottom slds-border_left">
+                                        <p
+                                            class="p-5 slds-text-longform slds-m-around_small slds-border_top slds-border_right slds-border_bottom slds-border_left">
+                                            To manage expectations for students applying for a bursary, a student
+                                            timeline should be provide for the individual student's journey. Describe
+                                            how the solution will manage the student journey inclusive of timescales'
+                                            for both students </p>
+                                        <p
+                                            class="p-4 slds-border_top slds-border_right slds-border_bottom slds-border_left slds-m-around_small">
+                                            Describe how the solution will manage bursary applications in Welsh and
+                                            facilitate engagement / communication with students (refer to guidance
+                                            policy no1 on page 43)</p>
+                                        <p
+                                            class="slds-text-longform slds-border_top slds-border_right slds-border_bottom slds-border_left p-6 slds-m-around_small">
+                                            Explain how the solution would verify UK bank details &amp; notify the
+                                            student or Student Awards Service of any changes. For example, advise if
+                                            incorrect bank number is submitted, confirm bank account can receive funds.
+                                        </p>
+                                        <div
+                                            class="slds-text-longform slds-border_top slds-border_right slds-border_bottom slds-border_left div-47 slds-m-around_small">
+                                            <p>An essential part of the bursary application process is verifying &amp;
+                                                certifying document evidence for identity checking. Describe and
+                                                demonstrate how the solution would undertake this functionality. (refer
+                                                to appendix A &amp; C, pages 38 &amp; 40).</p>
+                                            <p>You should explain in your answer:</p>
+                                            <ol type="a" class="ol-1">
+                                                <ol>
+                                                    <li>How the solution would identify documents eligible for e-verify
+                                                        / AI functionality.</li>
+                                                    <li class="li-14">How the solution can highlight documents not
+                                                        suitable for AI functionality.</li>
+                                                    <li class="li-15">How the solution would provide identity checking
+                                                        eg DBS checks.</li>
+                                                </ol>
+                                            </ol>
+                                        </div>
+                                    </div>
+                                </lightning-accordion-section>
+                            </lightning-accordion>-->
+                        </lightning-accordion>
+                    </lightning-tab>
+                    <lightning-tab icon-name="utility:check" label=" ">
+
+                        <div class="slds-p-around_small">
+                            <lightning-input name="enter-search" type="text" onkeyup={filterLibraryList}
+                                data-searchword="true" placeholder="Search Library...">
+                            </lightning-input>
+                        </div>
+                        <div class="slds-scrollable slds-p-around_small"
+                            style="max-height:55rem; width:100%; cursor:pointer">
+                            <template for:each={libraryList} for:item="lib">
+
+                                <div key={lib} class="slds-theme_shade slds-app-launcher__tile" style="cursor:pointer">
+                                    <div class="slds-app-launcher__tile-body" style="cursor:pointer">
+
+                                        <!-- <p class="p-11">Project Name/opportunity Name</p> -->
+                                        <div class="div-50 slds-text-heading_small">
+                                            <lightning-formatted-rich-text value={lib.Requirement_Name__c}>
+                                            </lightning-formatted-rich-text>
+                                        </div>
+                                        <lightning-layout pull-to-boundary="medium" multiple-rows="true"
+                                            class="slds-align-middle">
+                                            <lightning-layout-item padding="horizontal-medium" size="12"
+                                                small-device-size="12" medium-device-size="6" large-device-size="6">
+                                                <p class="p-13 slds-text-align_left slds-align-bottom">
+                                                    <!-- Matching Score: 65 -->
+                                                </p>
+                                            </lightning-layout-item>
+                                            <lightning-layout-item padding="horizontal-medium" size="12"
+                                                small-device-size="12" medium-device-size="6" large-device-size="6">
+                                                <ul class="slds-float_right slds-button-group-row">
+
+                                                    <li class="slds-button-group-item" style="margin-top: 5px;">
+                                                        Characters: {lib.Requirement_Name__c.length}
+                                                    </li>
+
+                                                    <li class="slds-button-group-item">
+                                                        <lightning-button-icon icon-name="utility:favorite"
+                                                            variant="border-filled" alternative-text="Settings"
+                                                            size="medium" class="button-icon-3"></lightning-button-icon>
+                                                    </li>
+                                                    <li class="slds-button-group-item">
+                                                        <lightning-button-icon onclick={AddMatchData}
+                                                            data-req={lib.Requirement_Name__c} icon-name="utility:add"
+                                                            variant="border-filled" alternative-text="Settings"
+                                                            size="medium"></lightning-button-icon>
+                                                    </li>
+                                                </ul>
+                                            </lightning-layout-item>
+                                        </lightning-layout>
+                                    </div>
+                                </div>
+                            </template>
+                        </div>
+
+
+
+                        <!--   
+                        <div class="slds-theme_shade slds-app-launcher__tile">
+                            <div class="slds-app-launcher__tile-body">
+                                <div>
+                                    <lightning-input name="enter-search" type="search" placeholder="Seach Libraby...">
+                                    </lightning-input>
+                                </div>
+                                <p class="p-11">Project Name/opportunity Name</p>
+                                <div class="div-50 slds-text-heading_small">Requirement 1</div>
+                                <p class="p-12">Response: Understand the societal and business value of having a
+                                    diverse, inclusive workforce,</p>
+                                <div>
+                                    <lightning-layout pull-to-boundary="medium" multiple-rows="true"
+                                        class="slds-align-middle">
+                                        <lightning-layout-item padding="horizontal-medium" size="12"
+                                            small-device-size="12" medium-device-size="6" large-device-size="6">
+                                            <p class="p-13 slds-text-align_left slds-align-bottom">Matching Score: 65
+                                            </p>
+                                        </lightning-layout-item>
+                                        <lightning-layout-item padding="horizontal-medium" size="12"
+                                            small-device-size="12" medium-device-size="6" large-device-size="6">
+                                            <ul class="slds-float_right slds-button-group-row">
+                                                <li class="slds-button-group-item">
+                                                    <lightning-button-icon icon-name="utility:favorite"
+                                                        variant="border-filled" alternative-text="Settings"
+                                                        size="medium" class="button-icon-3"></lightning-button-icon>
+                                                </li>
+                                                <li class="slds-button-group-item">
+                                                    <lightning-button-icon icon-name="utility:add"
+                                                        variant="border-filled" alternative-text="Settings"
+                                                        size="medium"></lightning-button-icon>
+                                                </li>
+                                            </ul>
+                                        </lightning-layout-item>
+                                    </lightning-layout>
+                                </div>
+                            </div>
+                        </div>
+                       
+                        <div class="slds-theme_shade slds-app-launcher__tile">
+                            <div class="slds-app-launcher__tile-body">
+                                <div>
+                                    <lightning-input name="enter-search" type="search" placeholder="Seach Libraby...">
+                                    </lightning-input>
+                                </div>
+                                <p class="p-11">Project Name/opportunity Name</p>
+                                <div class="div-50 slds-text-heading_small">Requirement 2</div>
+                                <p class="p-12">Response: Understand the societal and business value of having a
+                                    diverse, inclusive workforce,</p>
+                                <div>
+                                    <lightning-layout pull-to-boundary="medium" multiple-rows="true"
+                                        class="slds-align-middle">
+                                        <lightning-layout-item padding="horizontal-medium" size="12"
+                                            small-device-size="12" medium-device-size="6" large-device-size="6">
+                                            <p class="p-13 slds-text-align_left slds-align-bottom">Matching Score: 54
+                                            </p>
+                                        </lightning-layout-item>
+                                        <lightning-layout-item padding="horizontal-medium" size="12"
+                                            small-device-size="12" medium-device-size="6" large-device-size="6">
+                                            <ul class="slds-float_right slds-button-group-row">
+                                                <li class="slds-button-group-item">
+                                                    <lightning-button-icon icon-name="utility:favorite"
+                                                        variant="border-filled" alternative-text="Settings"
+                                                        size="medium" class="button-icon-3"></lightning-button-icon>
+                                                </li>
+                                                <li class="slds-button-group-item">
+                                                    <lightning-button-icon icon-name="utility:add"
+                                                        variant="border-filled" alternative-text="Settings"
+                                                        size="medium"></lightning-button-icon>
+                                                </li>
+                                            </ul>
+                                        </lightning-layout-item>
+                                    </lightning-layout>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="slds-theme_shade slds-app-launcher__tile">
+                            <div class="slds-app-launcher__tile-body">
+                                <div>
+                                    <lightning-input name="enter-search" type="search" placeholder="Seach Libraby...">
+                                    </lightning-input>
+                                </div>
+                                <p class="p-11">Project Name/opportunity Name</p>
+                                <div class="div-50 slds-text-heading_small">Requirement 3</div>
+                                <p class="p-12">Response: Understand the societal and business value of having a
+                                    diverse, inclusive workforce,</p>
+                                <div>
+                                    <lightning-layout pull-to-boundary="medium" multiple-rows="true"
+                                        class="slds-align-middle">
+                                        <lightning-layout-item padding="horizontal-medium" size="12"
+                                            small-device-size="12" medium-device-size="6" large-device-size="6">
+                                            <p class="p-13 slds-text-align_left slds-align-bottom">Matching Score: 65
+                                            </p>
+                                        </lightning-layout-item>
+                                        <lightning-layout-item padding="horizontal-medium" size="12"
+                                            small-device-size="12" medium-device-size="6" large-device-size="6">
+                                            <ul class="slds-float_right slds-button-group-row">
+                                                <li class="slds-button-group-item">
+                                                    <lightning-button-icon icon-name="utility:favorite"
+                                                        variant="border-filled" alternative-text="Settings"
+                                                        size="medium" class="button-icon-3"></lightning-button-icon>
+                                                </li>
+                                                <li class="slds-button-group-item">
+                                                    <lightning-button-icon icon-name="utility:add"
+                                                        variant="border-filled" alternative-text="Settings"
+                                                        size="medium"></lightning-button-icon>
+                                                </li>
+                                            </ul>
+                                        </lightning-layout-item>
+                                    </lightning-layout>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="slds-theme_shade slds-app-launcher__tile">
+                            <div class="slds-app-launcher__tile-body">
+                                <div>
+                                    <lightning-input name="enter-search" type="search" placeholder="Seach Libraby...">
+                                    </lightning-input>
+                                </div>
+                                <p class="p-11">Project Name/opportunity Name</p>
+                                <div class="div-50 slds-text-heading_small">Requirement 4</div>
+                                <p class="p-12">Response: Understand the societal and business value of having a
+                                    diverse, inclusive workforce,</p>
+                                <div>
+                                    <lightning-layout pull-to-boundary="medium" multiple-rows="true"
+                                        class="slds-align-middle">
+                                        <lightning-layout-item padding="horizontal-medium" size="12"
+                                            small-device-size="12" medium-device-size="6" large-device-size="6">
+                                            <p class="p-13 slds-text-align_left slds-align-bottom">Matching Score: 65
+                                            </p>
+                                        </lightning-layout-item>
+                                        <lightning-layout-item padding="horizontal-medium" size="12"
+                                            small-device-size="12" medium-device-size="6" large-device-size="6">
+                                            <ul class="slds-float_right slds-button-group-row">
+                                                <li class="slds-button-group-item">
+                                                    <lightning-button-icon icon-name="utility:favorite"
+                                                        variant="border-filled" alternative-text="Settings"
+                                                        size="medium" class="button-icon-3"></lightning-button-icon>
+                                                </li>
+                                                <li class="slds-button-group-item">
+                                                    <lightning-button-icon icon-name="utility:add"
+                                                        variant="border-filled" alternative-text="Settings"
+                                                        size="medium"></lightning-button-icon>
+                                                </li>
+                                            </ul>
+                                        </lightning-layout-item>
+                                    </lightning-layout>
+                                </div>
+                            </div>
+                        </div>-->
+                    </lightning-tab>
+                    <lightning-tab icon-name="utility:knowledge_base" label=" ">
+
+                        <div class="slds-p-around_small">
+                            <lightning-input name="enter-search" type="text" onkeyup={filterDocLibraryList}
+                                data-searchword="true" placeholder="Search Library...">
+                            </lightning-input>
+                        </div>
+                        <div class="slds-scrollable slds-p-around_small" style="max-height:55rem; width:100%">
+                            <template for:each={docLibraryList} for:item="lib">
+
+                                <div key={lib} class="slds-theme_shade slds-app-launcher__tile"
+                                    style="cursor: pointer">
+                                    <div class="slds-app-launcher__tile-body;">
+
+                                        <!-- <p class="p-11">Project Name/opportunity Name</p> -->
+                                        <div class="div-50 slds-text-heading_small textLimit">
+                                            <lightning-formatted-rich-text value={lib.Description__c}
+                                                onclick={knowlegdeArticleOnchange}>
+                                            </lightning-formatted-rich-text>
+                                        </div>
+
+
+                                        <template if:true={knowlegdeArticlePopup}>
+
+                                            <div class="slds-modal slds-fade-in-open slds-backdrop">
+                                                <div class="slds-modal__container">
+                                                    <div class="slds-modal__header">
+                                                        <lightning-button-icon icon-name="utility:close"
+                                                            alternative-text="Close this window" size="large"
+                                                            variant="bare-inverse" onclick={knowlegdeArticleOnchange}
+                                                            class="slds-modal__close">
+                                                        </lightning-button-icon>
+                                                        <h2>Knowledge Base</h2>
+                                                    </div>
+                                                    <div class="slds-modal__content slds-p-around_medium">
+                                                        <lightning-formatted-rich-text value={knowlegdeArticleData}>
+                                                        </lightning-formatted-rich-text>
+                                                    </div>
+                                                    <div class="slds-modal__footer">
+                                                        <lightning-button label="close" variant="brand"
+                                                            onclick={knowlegdeArticleOnchange}>
+                                                        </lightning-button>
+                                                    </div>
+                                                </div>
+                                            </div>
+
+                                            <!-- <section style="margin-top: 20px;" role="dialog" tabindex="-1" 
+                                                aria-label="Meaningful description of the modal content"
+                                                aria-modal="true" class="slds-modal slds-fade-in-open">
+                                                <div class="slds-modal__container">
+                                                    
+                                                    <div
+                                                        class="slds-modal__content slds-p-around_medium slds-modal__content_headless">
+                                                        <lightning-formatted-rich-text value={knowlegdeArticleData}
+                                                           >
+                                                        </lightning-formatted-rich-text>
+
+                                                    </div>
+                                                    <div class="slds-modal__footer">
+                                                        <button class="slds-button slds-button_neutral"
+                                                            aria-label="Cancel and close"
+                                                            onclick={knowlegdeArticleOnchange}>Cancel</button>
+                                                    </div>
+                                                </div>
+                                            </section> -->
+
+                                        </template>
+
+                                        <lightning-layout pull-to-boundary="medium" multiple-rows="true"
+                                            class="slds-align-middle">
+                                            <lightning-layout-item padding="horizontal-medium" size="12"
+                                                small-device-size="12" medium-device-size="6" large-device-size="6">
+                                                <p class="p-13 slds-text-align_left slds-align-bottom">
+                                                    <!-- Matching Score: 65 -->
+                                                </p>
+                                            </lightning-layout-item>
+                                            <lightning-layout-item padding="horizontal-medium" size="12"
+                                                small-device-size="12" medium-device-size="6" large-device-size="6">
+                                                <ul class="slds-float_right slds-button-group-row">
+                                                    <li class="slds-button-group-item">
+                                                        <lightning-button-icon icon-name="utility:favorite"
+                                                            variant="border-filled" alternative-text="Settings"
+                                                            size="medium" class="button-icon-3"></lightning-button-icon>
+                                                    </li>
+                                                    <li class="slds-button-group-item">
+                                                        <lightning-button-icon onclick={AddMatchData}
+                                                            data-req={lib.Requirement_Name__c} icon-name="utility:add"
+                                                            variant="border-filled" alternative-text="Settings"
+                                                            size="medium"></lightning-button-icon>
+                                                    </li>
+                                                </ul>
+                                            </lightning-layout-item>
+                                        </lightning-layout>
+                                    </div>
+                                </div>
+                            </template>
+                        </div>
+                    </lightning-tab>
+                    <lightning-tab icon-name="utility:comments"></lightning-tab>
+                </lightning-tabset>
+            </lightning-layout-item>
+
+            <template if:true={openResponseModal}>
+                <div class="slds-modal slds-fade-in-open slds-backdrop responses">
+                    <div class="slds-modal__container">
+                        <div class="slds-modal__header slds-p-around_none">
+                            <lightning-button-icon icon-name="utility:close" alternative-text="Close this window"
+                                size="large" variant="bare-inverse" onclick={closeResponseModal}
+                                class="slds-modal__close">
+                            </lightning-button-icon>
+                            <div class="div-header">
+                                <div class="div-10 slds-text-heading_medium slds-p-around_large">Matched Responses</div>
+                            </div>
+
+                        </div>
+                        <div class="slds-modal__content slds-p-around_medium">
+                            <c-matching_response_selector onselected={responseSelected}></c-matching_response_selector>
+                        </div>
+
+                        <div class="slds-modal__footer">
+                            <lightning-button style="margin-right: 20px;" label="Add Response" onclick={addResponse}>
+                            </lightning-button>
+                            <lightning-button label="close" variant="brand" onclick={closeResponseModal}>
+                            </lightning-button>
+                        </div>
+                    </div>
+                </div>
+            </template>
+
+            <template if:true={openSingleResponseModal}>
+                <div class="slds-modal slds-fade-in-open slds-backdrop responses">
+                    <div class="slds-modal__container">
+                        <div class="slds-modal__header slds-p-around_none">
+                            <lightning-button-icon icon-name="utility:close" alternative-text="Close this window"
+                                size="large" variant="bare-inverse" onclick={closeSingleResponseModal}
+                                class="slds-modal__close">
+                            </lightning-button-icon>
+                            <div class="div-header">
+                                <div class="div-10 slds-text-heading_medium slds-p-around_large">Matched Responses</div>
+                            </div>
+
+                        </div>
+                        <div class="slds-modal__content slds-p-around_medium">
+                            <c-matching_response_selector onselected={singleResponseSelected}>
+                            </c-matching_response_selector>
+                        </div>
+
+                        <div class="slds-modal__footer">
+                            <lightning-button style="margin-right: 20px;" label="Add Response"
+                                onclick={addSingleResponse}>
+                            </lightning-button>
+                            <lightning-button label="close" variant="brand" onclick={closeSingleResponseModal}>
+                            </lightning-button>
+                        </div>
+                    </div>
+                </div>
+            </template>
+
+            <lightning-layout-item padding="horizontal-medium" size="12" small-device-size="12" medium-device-size="8"
+                large-device-size="8">
+                <template if:true={isSectionView}>
+                    <div class="slds-text-heading_small slds-text-align_left div-2"
+                        style="font-weight: bold;padding-top:30px">
+                        <a class="a-4 slds-p-left_xx-small">{selectedSection.Name}</a>
+                        <lightning-button-icon icon-name="utility:reply_all" variant="bare-inverse"
+                            alternative-text="Settings" size="large"
+                            class="slds-float_right button-icon-1-copy slds-p-around_xxx-small"
+                            title="Import all Responses" tooltip="Reset Matched Responses" type="button">
+                        </lightning-button-icon>
+                        <lightning-button-icon icon-name="utility:adduser" variant="border-filled"
+                            class="slds-float_right" size="large" onclick={openBulkModalHandle} title="Assign User"
+                            type="button" tooltip="Requirement Section Owner"></lightning-button-icon>
+                    </div>
+                    <template for:each={selectedSection.Requirements__r} for:item="Requirement" for:index="ind">
+
+                        <div style="margin-top:3%;padding-right:35px" key={Requirement}
+                            class="slds-text-body_regular slds-scrollable_y div-8">
+
+                            <lightning-record-edit-form object-api-name="Requirement__c" record-id={Requirement.Id}
+                                data-ind={ind} onsubmit={handleSubmitResponse} onsuccess={handleSuccessForm}
+                                onerror={handleErrorForm}>
+                                <div class="div-40 slds-form-element">
+
+
+                                    <div class="slds-grid slds-gutters">
+                                        <div class="slds-col slds-size_1-of-12" style="width: 20px;">
+                                            <input type="checkbox" data-userid={Requirement.Id} />
+                                        </div>
+
+                                        <div class="slds-col slds-size_10-of-12">
+                                            <lightning-output-field field-name="Requirement__c" variant="label-hidden">
+                                            </lightning-output-field>
+                                        </div>
+
+                                        <div class="slds-col slds-size_1-of-12" style="width: 50px;">
+                                            <button
+                                                class="slds-button slds-button_icon slds-button_icon-brand matching-btn"
+                                                title="Matching Responses" data-id={Requirement.Id} data-ind={ind}
+                                                type="button" onclick={matchResponse}>
+                                                <lightning-icon icon-name="utility:reply"
+                                                    alternative-text="Matching Responses" size="small" variant="inverse"
+                                                    title="Matching Responses"></lightning-icon>
+
+                                            </button>
+
+                                        </div>
+                                        <div class="slds-col slds-size_1-of-12" style="width: 50px;">
+
+                                            <span class="slds-avatar slds-avatar_circle slds-avatar_medium">
+                                                <img onclick={showModal} data-id={Requirement.Id} alt="Person name"
+                                                    src={Requirement.SmallPhotoUrl} class="avatar-7" />
+                                            </span>
+
+                                            <!-- <lightning-avatar onclick={showModal} initials="AS" data-id={Requirement.Id}
+                                                size="medium" variant="square" src={Requirement.SmallPhotoUrl}
+                                                class="avatar-7">
+                                            </lightning-avatar> -->
+                                        </div>
+                                    </div>
+
+
+
+                                    <!--<lightning-button-icon icon-name="utility:reply" variant="bare-inverse"
+                                        alternative-text="Settings" size="xx-small"
+                                        class="slds-align-middle button-icon-1 slds-p-around_xxx-small"
+                                        title="Check  Responses" tooltip="Review Matched Responses" type="button">
+                                    </lightning-button-icon>-->
+                                    <div class="slds-form-element__control">
+                                        <lightning-input-field style="width:95%" variant="label-hidden"
+                                            field-name="Response__c" value={Requirement.responseText}>
+                                        </lightning-input-field>
+                                        <!-- <lightning-textarea variant="label-hidden" placeholder="Write your response"
+                                            class="textarea-2"></lightning-textarea> -->
+
+                                    </div>
+                                    <div class="slds-form-element__control" style="margin-top: 10px;">
+                                        <lightning-button data-ind={ind} variant="brand" label="Save" type="submit">
+                                        </lightning-button>
+
+                                    </div>
+                                </div>
+                            </lightning-record-edit-form>
+                            <hr />
+                        </div>
+
+                    </template>
+
+                </template>
+                <template if:false={isSectionView}>
+                    <lightning-record-edit-form object-api-name="Requirement__c" record-id={RequirementId}
+                        onsuccess={handleResponseSuccess} onerror={handleReponseError}>
+
+                        <lightning-card title="Response Details" icon-name="custom:custom90"
+                            class="card-2 slds-m-around_none" variant="narrow">
+                            <!--<div slot="footer">
+                        <lightning-input-rich-text placeholder="Type something interesting" variant="bottom-toolbar">
+                        </lightning-input-rich-text>
+                    </div>-->
+
+                            <div slot="actions">
+                                <!--<lightning-record-edit-form object-api-name="Requirement__c" record-id={RequirementId}>-->
+                                <lightning-layout horizontal-align="end" class="slds-align_absolute-center layout-4"
+                                    style="text-align: left;">
+
+                                    <lightning-layout-item style="margin-right:10px;height: 64px;">
+                                        <lightning-output-field field-name="Response_Limit__c" variant=" label-inline">
+                                        </lightning-output-field>
+                                    </lightning-layout-item>
+
+
+                                    <lightning-layout-item style="margin-right:10px">
+                                        <lightning-input-field field-name="Status__c" onchange={handleStatusChange}>
+                                        </lightning-input-field>
+                                        <!--<lightning-combobox placeholder="Status" options={options7}
+                                            variant="label-hidden" class="combobox-1" dropdown-alignment="left">
+                                        </lightning-combobox>-->
+                                    </lightning-layout-item>
+
+                                    <lightning-layout-item style="margin-right:10px;width: 100px;">
+                                        <lightning-input-field field-name="Effort_Level__c" placeholder="Effort Level"
+                                            onchange={handleEffortChange}>
+                                        </lightning-input-field>
+                                    </lightning-layout-item>
+
+                                    <lightning-layout-item style="margin-right:10px;padding-top: 13px;">
+                                        <button class="slds-button slds-button_icon slds-button_icon-brand matching-btn"
+                                            title="Matching Responses" data-id={RequirementId}
+                                            data-ind={tempMatchingIndex} type="button" onclick={singleMatchResponse}>
+                                            <lightning-icon icon-name="utility:reply"
+                                                alternative-text="Matching Responses" size="small" variant="inverse"
+                                                title="Matching Responses"></lightning-icon>
+
+                                        </button>
+                                    </lightning-layout-item>
+
+
+
+                                    <lightning-layout-item style="padding-top: 10px;">
+                                        <lightning-avatar data-id={RequirementId} data-ind={tempMatchingIndex}
+                                            onclick={showModal} initials="AS" size="medium" variant="square"
+                                            src={userPhoto} class="avatar-7"></lightning-avatar>
+                                    </lightning-layout-item>
+
+
+                                </lightning-layout>
+                                <button style="display: none;" class="submite-data-button" variant="brand" type="submit"
+                                    label="Save">Save
+                                </button>
+                                <!--</lightning-record-edit-form>-->
+                            </div>
+                            <div title="Response">
+                                <div class={clr}>
+                                    <div class="slds-text-longform div-47 response-detail">
+                                        <lightning-formatted-rich-text value={singleResponse.req}>
+
+                                        </lightning-formatted-rich-text>
+
+                                        <!-- <p class="p-9">Describe how the solution can interface with the following software.</p>
+                                <ol type="a" class="ol-1">
+                                    <ol>
+                                        <li class="li-24">ESR (Employee Service Record) version 50.1.1.0C. RDBMS:
+                                            12.1.0.2.0 Oracle applications 12.2.6</li>
+                                        <li class="li-14">Accounts Payable - Oracle version R12</li>
+                                        <li class="li-15">Trac system - Multi-tenancy.</li>
+                                        <li class="li-16">SSP - Matching Scheme (see deliverable no2)</li>
+                                        <li class="li-16">SSP - Matching Scheme (see deliverable no2)</li>
+                                        <li class="li-17">Selenity</li>
+                                    </ol>
+                                </ol> -->
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- <span style="float: right;margin-right: 7px;font-size: 13px; margin-top: 17px"></span> -->
+                            <!-- <input style="margin: 5px 7px 0px 0;" checked={isCheck} data-id={LibSecionId}
+                                onclick={handleLibraryCheck} type="checkbox" name="input1"
+                                class="slds-float_right input-11"></input>
+                            <div class="slds-var-m-top_medium"> -->
+
+                            <lightning-messages> </lightning-messages>
+                            <label>Response - ( Character {characterLength} / Words {wordLength} )</label>
+                            <lightning-input-field field-name="Response__c" variant="label-hidden"
+                                value={selectedResponse} onchange={handleResponseEditor}>
+                            </lightning-input-field>
+
+                            <lightning-input-field field-name="Response_HTML__c" class="slds-hidden"
+                                value={textWithoutTags} variant="label-hidden">
+                            </lightning-input-field>
+
+                            <div class="slds-var-m-top_medium" style="margin-top: -29px;">
+                                <lightning-button variant="brand" class="single-form" type="submit" label="Save">
+                                </lightning-button>
+
+                                <lightning-button style="margin-left: 10px;" data-id={LibSecionId}
+                                    onclick={handleLibraryCheck} name="input1" variant={addLibraryButtonColor}
+                                    label={libraryButtonTitle}>
+                                </lightning-button>
+                                <!-- data-sectionid={section.Id} data-id={req.Id} data-ind={reqInd}
+                                data-text={req.Requirement__c}  -->
+                                <template if:true={prevButton}>
+                                    <lightning-button style="margin-left: 10px;" variant="brand" onclick={nextClicked}
+                                        label="Previous">
+                                    </lightning-button>
+                                </template>
+
+                                <template if:true={nextButton}>
+                                    <lightning-button style="margin-left: 10px;" variant="brand" onclick={nextClicked}
+                                        label="Next">
+                                    </lightning-button>
+                                </template>
+                            </div>
+                            <!--<lightning-textarea style="margin-top: 25px;" label="Response - ( Character 268 / Words 98 )"
+                        variant="standard" class="textarea-1"></lightning-textarea>-->
+
+                        </lightning-card>
+                    </lightning-record-edit-form>
+                    <div class="slds-grid slds-gutters">
+                        <div class="slds-col slds-size_6-of-12">
+                            <lightning-card
+                                class="card-3 slds-border_top slds-border_right slds-border_bottom slds-border_left">
+                                <div slot="title">
+                                    <template for:each={tagsList} for:item="tag">
+                                        <span key={tag}>
+                                            <lightning-badge style="padding-right: 25px;"
+                                                label={tag.Linked_Tags__r.Name}
+                                                class="slds-theme_success avtemplate-radius_medium">
+
+                                            </lightning-badge>
+                                            <lightning-button-icon onclick={removeTag} data-id={tag.Id}
+                                                data-name={tag.Linked_Tags__r.Name} icon-name="utility:close"
+                                                style="left: -22px;top:-2px;position: relative;" variant="bare-inverse"
+                                                alternative-text="Close" title="Remove"></lightning-button-icon>
+                                        </span>
+                                    </template>
+                                </div>
+                                <div class="slds-card__body_inner slds-p-around_small">
+                                    <div class="slds-text-heading_small slds-m-bottom_small" style="font-weight: bold">
+                                        Tags
+                                    </div>
+                                    <c-search-component filter={tagNames} req-id={RequirementId} obj-name="Tag__c"
+                                        search-placeholder="Search Tags" icon-name="standard:account"
+                                        onlookupselected={handleTagSelection}> </c-search-component>
+
+                                    <div class="slds-border_top slds-p-top_small">
+                                        <!-- <lightning-badge label="All Tag" class="slds-p-around_x-small"></lightning-badge> -->
+                                        <!-- <lightning-badge label="New Tags" class="slds-p-around_x-small">
+                                        </lightning-badge> -->
+                                    </div>
+                                </div>
+                            </lightning-card>
+                        </div>
+
+                        <div style="width: 50%; margin-left:-7px" class="slds-col slds-size_6-of-12">
+                            <lightning-card title={fileCount} icon-name="standard:file" variant="base" class="card-4"
+                                style="padding: 10px;">
+                                <div slot="actions">
+                                    <lightning-file-upload label="Attach file" name="fileUploader"
+                                        record-id={RequirementId} onuploadfinished={handleUploadFinished} multiple>
+                                    </lightning-file-upload>
+                                </div>
+                                <div slot="footer"><a target="_blank" class="slds-text-link" href="">View All</a> </div>
+                                <div class="slds-card__body_inner">
+                                    <lightning-layout class="slds-wrap" multiple-rows="true" pull-to-boundary="medium">
+                                        <template for:each={dataList} for:item="file" for:index="fileInd">
+                                            <lightning-layout-item size="6" small-device-size="12"
+                                                medium-device-size="5" large-device-size="5" padding="horizontal-medium"
+                                                key={file}>
+                                                <div class="slds-media">
+                                                    <div class="slds-media__body">
+                                                        <div key={file.Id} class="slds-grid slds-gutters">
+                                                            <div class="slds-col slds-size_1-of-12">
+                                                                <lightning-input type="radio" name="options"
+                                                                    value={fileInd} data-ind={fileInd}
+                                                                    class="input-1 slds-text-align_left"
+                                                                    onchange={handleRadioClick}></lightning-input>
+                                                            </div>
+                                                            <div class="slds-col slds-size_11-of-12">
+                                                                <lightning-tile type="media" label={file.Title}>
+                                                                    <div slot="media">
+                                                                        <lightning-icon icon-name={file.icon}
+                                                                            size="small" variant="inverse">
+                                                                        </lightning-icon>
+                                                                    </div>
+                                                                    <div>
+                                                                        <dl class="slds-wrap slds-list_horizontal">
+                                                                            <dt class="slds-item_label slds-text-color_weak slds-truncate"
+                                                                                title={file.CREATED_BY}>
+                                                                                Owner:</dt>
+                                                                            <dd class="slds-item_detail slds-truncate"
+                                                                                title={file.CREATED_BY}>
+                                                                                {file.CREATED_BY}
+                                                                            </dd>
+                                                                            <dt class="slds-item_label slds-text-color_weak slds-truncate"
+                                                                                title="Size:">
+                                                                                Size:</dt>
+                                                                            <dd class="slds-item_detail slds-truncate"
+                                                                                title={file.Size}>{file.Size}</dd>
+                                                                        </dl>
+                                                                    </div>
+                                                                </lightning-tile>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </lightning-layout-item>
+                                        </template>
+                                    </lightning-layout>
+                                </div>
+                            </lightning-card>
+                        </div>
+                    </div>
+                </template>
+
+
+            </lightning-layout-item>
+        </lightning-layout>
+
+    </div>
+</template>

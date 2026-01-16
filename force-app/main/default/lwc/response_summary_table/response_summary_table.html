@@ -1,0 +1,102 @@
+<template>
+    <div class="div-2 slds-box slds-p-around_none">
+        <div class="div-4 slds-text-title_bold">Completion Status by Section</div>
+        <template for:each={dataList} for:item="section">
+            <lightning-layout key={file} multiple-rows="true" vertical-align="center" horizontal-align="spread" class="slds-p-vertical_small slds-border_bottom">
+                <lightning-layout-item class="sectionname" padding="horizontal-medium">
+                    <p><a href="#" data-id={section.Id} onclick={openResponsePage} >{section.Name}</a></p>
+                    <!-- <p title={section.Name} class="slds-text-heading_small slds-m-bottom_x-small slds-m-top_x-small" >{section.ShortName}</p> -->
+                </lightning-layout-item>
+                <lightning-layout-item padding="horizontal-medium" size="12" small-device-size="6" medium-device-size="1" large-device-size="3">
+                    <div class="slds-media slds-media_center slds-m-bottom_x-small slds-m-top_x-small">
+                        <div class="slds-media__figure">
+                            <template if:false={section.noReq}>
+                                <template if:true={section.showFirst}>
+                                    <lightning-avatar variant="circle" src={section.userPhoto1} initials="AW" fallback-icon-name="standard:person_account" alternative-text="User1" class="slds-m-right_small"></lightning-avatar>
+                                </template>
+                                <template if:true={section.showSec}>
+                                    <lightning-avatar variant="circle" src={section.userPhoto2}  initials="AW" fallback-icon-name="standard:person_account" alternative-text="User2" class="slds-m-right_small"></lightning-avatar>
+                                </template>
+                                <template if:true={section.showThird}>
+                                    <lightning-avatar variant="circle" src="" initials={section.numberOfUser} fallback-icon-name="standard:person_account" alternative-text="Users" class="slds-m-right_small"></lightning-avatar>
+                                </template>
+                            </template>
+                            <!--<c-avonni-avatar-group size="small" items={items} variant="circle" max-count="2" class="avatar-group-1"></c-avonni-avatar-group>-->
+                        </div>
+                    </div>
+                </lightning-layout-item>
+                <lightning-layout-item padding="horizontal-medium" size="6" small-device-size="6" medium-device-size="2" large-device-size="3">
+                    <lightning-progress-bar value={section.progress} size="large" variant="circular" title="Progress based on Number of Requirements" class="progress-bar-1">
+                        <lightning-progress-bar value={section.progress} size="large" variant="circular" title="Progress based on Number of Requirements" class="progress-bar-1"></lightning-progress-bar>
+                    </lightning-progress-bar>
+                </lightning-layout-item>
+                <!-- <lightning-layout-item padding="horizontal-medium" class="slds-text-align_right slds-m-top_x-small" flexibility="no-shrink">
+                    <p>
+                        <lightning-button label="Response" title="Neutral action" onclick={openResponsePage} data-id={section.Id}></lightning-button>
+                    </p>
+                </lightning-layout-item> -->
+            </lightning-layout>
+        </template>
+        
+        <!--<lightning-layout multiple-rows="true" vertical-align="center" horizontal-align="spread" class="slds-p-vertical_small slds-border_bottom">
+            <lightning-layout-item padding="horizontal-medium">
+                <p class="slds-text-heading_small slds-m-bottom_x-small slds-m-top_x-small">Section 2</p>
+            </lightning-layout-item>
+            <lightning-layout-item padding="horizontal-medium" size="12" small-device-size="6" medium-device-size="1" large-device-size="3">
+                <div class="slds-media slds-media_center slds-m-bottom_x-small slds-m-top_x-small">
+                    <div class="slds-media__figure">
+                        <!-<c-avonni-avatar-group size="small" items={items} variant="circle" max-count="2" class="avatar-group-1-copy"></c-avonni-avatar-group>->
+                    </div>
+                </div>
+            </lightning-layout-item>
+            <lightning-layout-item padding="horizontal-medium" size="6" small-device-size="6" medium-device-size="2" large-device-size="3">
+                <lightning-progress-bar value="50" size="large" variant="circular" title="Progress based on Number of Requirements"></lightning-progress-bar>
+            </lightning-layout-item>
+            <lightning-layout-item padding="horizontal-medium" class="slds-text-align_right slds-m-top_x-small" flexibility="no-shrink">
+                <p>
+                    <lightning-button label="Response" title="Neutral action"></lightning-button>
+                </p>
+            </lightning-layout-item>
+        </lightning-layout>
+        <lightning-layout multiple-rows="true" vertical-align="center" horizontal-align="spread" class="slds-p-vertical_small slds-border_bottom">
+            <lightning-layout-item padding="horizontal-medium">
+                <p class="slds-text-heading_small slds-m-bottom_x-small slds-m-top_x-small">Section 3</p>
+            </lightning-layout-item>
+            <lightning-layout-item padding="horizontal-medium" size="12" small-device-size="6" medium-device-size="1" large-device-size="3">
+                <div class="slds-media slds-media_center slds-m-bottom_x-small slds-m-top_x-small">
+                    <div class="slds-media__figure">
+                        <!-<c-avonni-avatar-group size="small" items={items} variant="circle" max-count="2" class="avatar-group-1-copy-copy"></c-avonni-avatar-group>->
+                    </div>
+                </div>
+            </lightning-layout-item>
+            <lightning-layout-item padding="horizontal-medium" size="6" small-device-size="6" medium-device-size="2" large-device-size="3">
+                <lightning-progress-bar value="10" size="large" variant="circular" title="Progress based on Number of Requirements"></lightning-progress-bar>
+            </lightning-layout-item>
+            <lightning-layout-item padding="horizontal-medium" class="slds-text-align_right slds-m-top_x-small" flexibility="no-shrink">
+                <p>
+                    <lightning-button label="Response" title="Neutral action"></lightning-button>
+                </p>
+            </lightning-layout-item>
+        </lightning-layout>
+        <lightning-layout multiple-rows="true" vertical-align="center" horizontal-align="spread" class="slds-p-vertical_small slds-border_bottom">
+            <lightning-layout-item padding="horizontal-medium">
+                <p class="slds-text-heading_small slds-m-bottom_x-small slds-m-top_x-small">Section 4</p>
+            </lightning-layout-item>
+            <lightning-layout-item padding="horizontal-medium" size="12" small-device-size="6" medium-device-size="1" large-device-size="3">
+                <div class="slds-media slds-media_center slds-m-bottom_x-small slds-m-top_x-small">
+                    <div class="slds-media__figure">
+                        <!-<c-avonni-avatar-group size="small" items={items} variant="circle" max-count="2" class="avatar-group-1-copy-copy-copy"></c-avonni-avatar-group>->
+                    </div>
+                </div>
+            </lightning-layout-item>
+            <lightning-layout-item padding="horizontal-medium" size="6" small-device-size="6" medium-device-size="2" large-device-size="3">
+                <lightning-progress-bar value="50" size="large" variant="circular" title="Progress based on Number of Requirements"></lightning-progress-bar>
+            </lightning-layout-item>
+            <lightning-layout-item padding="horizontal-medium" class="slds-text-align_right slds-m-top_x-small" flexibility="no-shrink">
+                <p>
+                    <lightning-button label="Response" title="Neutral action"></lightning-button>
+                </p>
+            </lightning-layout-item>
+        </lightning-layout>-->
+    </div>    
+</template>

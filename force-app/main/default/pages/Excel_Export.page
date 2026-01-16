@@ -1,0 +1,87 @@
+<apex:page controller="ExportFileController">
+    <apex:includeScript value="{!$Resource.exceljs}" />
+    <apex:includeScript value="{!$Resource.jquery}" />
+    <script> 
+        var previousOnload = window.onload; window.onload = function () {
+            var workbook = new ExcelJS.Workbook();
+
+            workbook.xlsx.load(_base64ToArrayBuffer('{!fileData}'))
+                .then(function () {
+                    var requirementList = {!requirementsList
+                };
+            var worksheet = workbook.getWorksheet(1);
+            requirementList.forEach(e => {
+                if (e.Requirement_Index__c) {
+                    var indexs = e.Requirement_Index__c.split('-');
+                    var row = worksheet.getRow(parseInt(indexs[0]));
+                    row.getCell(parseInt(indexs[1])).value = e.Requirement__c;
+                    row.commit();
+                }
+                if (e.Response_Index__c) {
+                    var indexs = e.Response_Index__c.split('-');
+                    var row = worksheet.getRow(parseInt(indexs[0]));
+                    var responseDOM = $.parseHTML("<div>" + e.Response__c + "</div>");
+                    var formatedResponse = '';
+                    responseDOM[0].childNodes.forEach(function (ele) {
+                        if(ele.nodeName == "P"){
+                            formatedResponse += ele.innerHTML;
+                        }
+                        if(ele.nodeName == "UL"){
+                            ele.childNodes.forEach(function(e, i){
+                                formatedResponse += '\n\t•' + ' ' + e.innerHTML;
+                            })
+                            
+                        }
+                        if(ele.nodeName == "OL"){
+                            ele.childNodes.forEach(function(e, i){
+                                formatedResponse += '\n\t' + (i+1) + ' ' + e.innerHTML;
+                            })
+                            
+                        }
+                    })
+                    //var doc = new DOMParser().parseFromString(e.Response__c, "text/xml");
+                    row.getCell(parseInt(indexs[1])).value = formatedResponse;
+                    row.commit();
+                }
+
+            })
+            workbook.xlsx.writeBuffer({
+                base64: true
+            })
+                .then(function (xls64) {
+                    // build anchor tag and attach file (works in chrome)
+                    var a = document.createElement("a");
+                    var data = new Blob([xls64], { type: "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet" });
+
+                    var url = URL.createObjectURL(data);
+                    a.href = url;
+                    a.download = "export.xlsx";
+                    document.body.appendChild(a);
+                    a.click();
+                    setTimeout(function () {
+                        document.body.removeChild(a);
+                        //window.URL.revokeObjectURL(url);
+                    },
+                        0);
+                })
+                .catch(function (error) {
+                    console.log(error.message);
+                });
+        });
+        }
+        function _base64ToArrayBuffer(base64) {
+            var binary_string = window.atob(base64);
+            var len = binary_string.length;
+            var bytes = new Uint8Array(len);
+            for (var i = 0; i < len; i++) {
+                bytes[i] = binary_string.charCodeAt(i);
+            }
+            return bytes.buffer;
+        }
+    </script>
+    <!-- Begin Default Content REMOVE THIS -->
+    <h1>Congratulations</h1>
+    This is your new Page
+    <!-- End Default Content REMOVE THIS -->
+
+</apex:page>
