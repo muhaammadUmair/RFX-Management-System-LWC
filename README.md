@@ -247,40 +247,6 @@ This Salesforce Lightning Web Component (LWC) application is an RFX (Request for
 
 ## 🔄 Application Flow Diagrams
 
-### Main User Journey: Import to Response
-
-```mermaid
-graph TB
-    Start([User Starts]) --> Dashboard[Response Summary Dashboard]
-    Dashboard --> Import{Click Import}
-    
-    Import --> FileSelector[File Selector Component]
-    FileSelector --> UploadFiles[Uploaded File Selector]
-    UploadFiles --> SelectFile[Select Source File]
-    SelectFile --> NextToBid[Click Next]
-    
-    NextToBid --> BidSelector[Bid Selector Component]
-    BidSelector --> SelectBid[Select Target Bid]
-    SelectBid --> Generate[Open Response Generator]
-    
-    Generate --> ResponseGen[Response Generator]
-    ResponseGen --> ParseDoc[Parse Document: Word/Excel/PDF]
-    ParseDoc --> MapContent[Map Content]
-    MapContent --> SelectSections[Select Sections]
-    SelectSections --> SelectQuestions[Select Questions]
-    SelectQuestions --> SelectResponses[Select Responses]
-    SelectResponses --> SelectIDs[Select IDs]
-    SelectIDs --> Import2[Click Import Button]
-    
-    Import2 --> CreateRecords[Create Salesforce Records]
-    CreateRecords --> Editor[Response Editor]
-    
-    style Start fill:#e1f5fe
-    style Dashboard fill:#fff3e0
-    style ResponseGen fill:#e8f5e9
-    style Editor fill:#f3e5f5
-```
-
 ### Response Editing Workflow
 
 ```mermaid
